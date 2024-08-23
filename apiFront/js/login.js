@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 alert('Registro exitoso');
-                window.location.href = 'register.php';
+                localStorage.setItem('authToken', result.token);
+                window.location.href = 'vistaItems.php';
             } else {
                 alert('Error: ' + result.message);
             }
