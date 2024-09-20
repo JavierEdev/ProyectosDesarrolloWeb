@@ -61,3 +61,7 @@ switch ($uri[3]) {  // Cambiado de $uri[2] a $uri[3] para reflejar correctamente
         break;
 }
 ?>
+
+
+
+

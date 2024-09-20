@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const jsonData = JSON.stringify(Object.fromEntries(formData.entries()));
 
             try {
-                const response = await fetch('http://localhost/api/index.php/products', {
+                const response = await fetch('http://localhost:5012/api/products', { // Cambié el puerto a 5012
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = `vistaItems.php?token=${token}`; // Redirige a la lista de productos
                 } else {
                     const result = await response.json();
-                    alert('Error: ' + result.message);
+                    alert('Error: ' + (result.message || 'Error al agregar el producto'));
                 }
             } catch (error) {
                 console.error('Error:', error);

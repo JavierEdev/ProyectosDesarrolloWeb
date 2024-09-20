@@ -1,29 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Selecciona el botón con la clase 'register-submit'
     const submitButton = document.querySelector('.login-submit');
-    
-    // Asegúrate de que el formulario esté presente
     const form = document.getElementById('registerForm');
 
     if (submitButton && form) {
-        // Asocia el evento de clic al botón de envío
         submitButton.addEventListener('click', (event) => {
-            // Evita el comportamiento por defecto del botón de enviar
             event.preventDefault();
             handleFormSubmit();
         });
     }
 
-    // Función para manejar el envío del formulario de registro
     async function handleFormSubmit() {
-        // Obtén los datos del formulario
-        const data = new FormData(form);
-
-        // Convierte FormData a un objeto JSON
-        const jsonData = JSON.stringify(Object.fromEntries(data.entries()));
+        const formData = new FormData(form);
+        const formObject = Object.fromEntries(formData.entries());
+        const jsonData = JSON.stringify(formObject);
 
         try {
-            const response = await fetch('http://localhost/api/index.php/auth/login', {
+            const response = await fetch('http://localhost:5012/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,18 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: jsonData,
             });
 
+            if (!response.ok) {
+                // Verifica si hay algún error en la respuesta
+                const errorResult = await response.json();
+                throw new Error(errorResult.message || 'Error en la solicitud');
+            }
+
             const result = await response.json();
             
-            if (response.ok) {
-                alert('Registro exitoso');
-                localStorage.setItem('authToken', result.token);
-                window.location.href = 'vistaItems.php';
-            } else {
-                alert('Error: ' + result.message);
-            }
+            alert('Inicio de sesión exitoso');
+            localStorage.setItem('authToken', result.token);
+            window.location.href = 'vistaItems.php';
         } catch (error) {
             console.error('Error:', error);
-            alert('Hubo un problema con la solicitud.');
+            alert('Hubo un problema con la solicitud: ' + error.message);
         }
     }
 });
